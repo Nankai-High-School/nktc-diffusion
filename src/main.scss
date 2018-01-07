@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap-reboot.scss";
+@import "~bootstrap/scss/bootstrap-grid.scss";
+
+$notosans-fontface-path: "../node_modules/notosans-fontface/fonts";
+@import "~notosans-fontface/scss/notosans-fontface";
+
+body {
+  font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
