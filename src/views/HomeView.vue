@@ -1,6 +1,7 @@
 <template>
   <main class="home">
-    <div class="slogen fullscreen-slogen">
+    <div class="slogen">
+      <!--TODO full screen-->
       <canvas ref="background"></canvas>
       <div class="container">
         <h1>相信</h1>
@@ -8,41 +9,35 @@
       </div>
     </div>
 
-    <div class="fullscreen-other">
+    <div class="other">
       <div class="banner">
         <div class="container">
           <h3>2018</h3>
           <h1>热传递</h1>
           <h2>高校信息普及计划</h2>
-          <h4><button>什么是热传递？</button></h4>
-          <!--<div class="intro">-->
-          <!--<div class="container">-->
-          <!--<h2>什么是热传递</h2>-->
-          <!--<p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>-->
-          <!--<p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>-->
-          <!--<p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>-->
-          <!--<p>我们相信梦想的力量，更相信传承的力量。</p>-->
-          <!--<p>聚是一团火，化作漫天星。</p>-->
-          <!--</div>-->
-          <!--</div>-->
+          <h4><a href="#intro" v-on:click="switchIntro">什么是热传递？</a></h4>
+          <div class="intro" v-if="showIntro">
+            <p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>
+            <p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>
+            <p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>
+            <p>我们相信梦想的力量，更相信传承的力量。</p>
+            <p>聚是一团火，化作漫天星。</p>
+          </div>
         </div>
       </div>
-
 
       <div class="university-list">
         <div class="container">
           <h2>我想了解</h2>
           <ul>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'pku' }}">北京大学</router-link>
-            </li>
-            <li>清华大学</li>
-            <li>浙江大学</li>
-            <li>复旦大学</li>
-            <li>中国人民大学</li>
-            <li>上海交通大学</li>
-            <li>天津大学</li>
-            <li>南开大学</li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'pku' }}">北京大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'tsu' }}">清华大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'zju' }}">浙江大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'fdu' }}">复旦大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'ruc' }}">中国人民大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'sjtu' }}">上海交通大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'tju' }}">天津大学</router-link></li>
+            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'nku' }}">南开大学</router-link></li>
           </ul>
           <div class="more">
             <router-link :to="{ name: 'UniversityList'}">查看更多</router-link>
@@ -72,18 +67,14 @@
   export default {
     data () {
       return {
-        isAuthed: true,
-        data: {
-          username: 'lookas2001',
-          id: '1'
-        }
+        showIntro: false
       }
     },
     methods: {
-      handleScroll () {
-        return 0
+      switchIntro () {
+        this.showIntro = !this.showIntro
       },
-      mountBackground () {
+      showBackground () {
         // https://segmentfault.com/a/1190000009675230
         let el = this.$refs.background
         let ctx = el.getContext('2d')
@@ -239,20 +230,19 @@
     },
     components: {},
     mounted () {
-      this.mountBackground()
+      this.showBackground()
     },
     created () {
-      window.addEventListener('scroll', this.handleScroll)
+//      window.addEventListener('scroll', this.handleScroll)
     },
     destroyed () {
-      window.removeEventListener('scroll', this.handleScroll)
+//      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   .home {
-    color: #f8f9fa;
     .slogen {
       height: 100vh;
       background-color: #222;
@@ -281,11 +271,11 @@
     }
 
     .banner {
-      height: 90vh;
+      min-height: 90vh;
       background-color: #333;
 
       > .container {
-        padding: 15vh 10vw 0;
+        padding: 15vh 10vw 5vh;
 
         > h3 {
           margin-bottom: 0;
@@ -301,8 +291,14 @@
         }
 
         > h4 {
-          margin-top: 1rem;
+          margin: 1rem 0 0.75rem;
           font-size: 1.25rem;
+        }
+
+        > .intro {
+          p {
+            margin-bottom: 0.5rem;
+          }
         }
 
 
