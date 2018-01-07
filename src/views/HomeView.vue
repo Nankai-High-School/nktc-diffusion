@@ -4,8 +4,28 @@
       <!--TODO full screen-->
       <canvas ref="background"></canvas>
       <div class="container">
-        <h1>相信</h1>
-        <h2>传承的力量</h2>
+        <transition
+          name="first-slogen"
+          enter-active-class="animated fadeInDownBig"
+          leave-active-class="animated fadeOutUpBig"
+          v-on:after-enter="showSecondSlogen"
+          appear
+        >
+          <h1>相信</h1>
+        </transition>
+        <transition
+          name="second-slogen"
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+          v-on:after-enter="showMoreIcon"
+          appear
+        >
+          <h2 v-if="isShowSecondSlogen">传承的力量</h2>
+        </transition>
+
+        <transition name="more-icon" appear>
+          <i v-if="isShowMoreIcon" class="fa fa-chevron-down" aria-hidden="true"></i>
+        </transition>
       </div>
     </div>
 
@@ -15,14 +35,18 @@
           <h3>2018</h3>
           <h1>热传递</h1>
           <h2>高校信息普及计划</h2>
-          <h4><a href="#intro" v-on:click="switchIntro">什么是热传递？</a></h4>
-          <div class="intro" v-if="showIntro">
-            <p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>
-            <p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>
-            <p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>
-            <p>我们相信梦想的力量，更相信传承的力量。</p>
-            <p>聚是一团火，化作漫天星。</p>
-          </div>
+          <h4><a href="#intro" @click="isShowIntro = !isShowIntro">什么是热传递？</a></h4>
+          <transition
+            name="intro"
+          >
+            <div class="intro" v-if="isShowIntro">
+              <p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>
+              <p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>
+              <p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>
+              <p>我们相信梦想的力量，更相信传承的力量。</p>
+              <p>聚是一团火，化作漫天星。</p>
+            </div>
+          </transition>
         </div>
       </div>
 
@@ -30,14 +54,30 @@
         <div class="container">
           <h2>我想了解</h2>
           <ul>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'pku' }}">北京大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'tsu' }}">清华大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'zju' }}">浙江大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'fdu' }}">复旦大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'ruc' }}">中国人民大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'sjtu' }}">上海交通大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'tju' }}">天津大学</router-link></li>
-            <li><router-link :to="{ name: 'UniversityItem', params: { name: 'nku' }}">南开大学</router-link></li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'pku' }}">北京大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'tsu' }}">清华大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'zju' }}">浙江大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'fdu' }}">复旦大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'ruc' }}">中国人民大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'sjtu' }}">上海交通大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'tju' }}">天津大学</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'UniversityItem', params: { name: 'nku' }}">南开大学</router-link>
+            </li>
           </ul>
           <div class="more">
             <router-link :to="{ name: 'UniversityList'}">查看更多</router-link>
@@ -67,12 +107,21 @@
   export default {
     data () {
       return {
-        showIntro: false
+        isShowSecondSlogen: false,
+        isShowIntro: false,
+        isShowMoreIcon: false
       }
     },
     methods: {
-      switchIntro () {
-        this.showIntro = !this.showIntro
+      showSecondSlogen () {
+        setTimeout(() => {
+          this.isShowSecondSlogen = true
+        }, 500)
+      },
+      showMoreIcon () {
+        setTimeout(() => {
+          this.isShowMoreIcon = true
+        }, 500)
       },
       showBackground () {
         // https://segmentfault.com/a/1190000009675230
@@ -256,9 +305,12 @@
       }
 
       > .container {
+        display: flex;
         position: relative; // 使得z-index生效
         z-index: 2;
-        padding: 20vh 10vw 0;
+        flex-direction: column;
+        padding: 20vh 10vw 10vh;
+        height: 100vh;
 
         > h1 {
           font-size: 5rem;
@@ -266,6 +318,50 @@
 
         > h2 {
           font-size: 2.5rem;
+        }
+
+        @keyframes moreIconEnter {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        > .more-icon-enter-active {
+          animation: moreIconEnter 5s;
+        }
+
+        @keyframes moreIconLeave {
+          to {
+            opacity: 0;
+          }
+        }
+
+        > .more-icon-leave-active {
+          animation: moreIconEnter 5s;
+        }
+
+        @keyframes moreIconFlash {
+          from, 50%, to {
+            opacity: 1;
+          }
+
+          25%, 75% {
+            opacity: 0.25;
+          }
+        }
+
+        > i {
+          position: absolute;
+          bottom: 7.5vh;
+          align-self: center;
+          font-size: 2rem;
+          animation-name: moreIconFlash;
+          animation-duration: 10s;
+          animation-iteration-count: infinite;
         }
       }
     }
@@ -301,6 +397,37 @@
           }
         }
 
+        @keyframes introEnter {
+          from {
+            opacity: 0;
+            max-height: 0;
+          }
+
+          to {
+            opacity: 1;
+            max-height: 2000px;
+          }
+        }
+
+        > .intro-enter-active {
+          animation: introEnter 1s;
+        }
+
+        @keyframes introLeave {
+          from {
+            opacity: 1;
+            max-height: 2000px;
+          }
+
+          to {
+            opacity: 0;
+            max-height: 0;
+          }
+        }
+
+        > .intro-leave-active {
+          animation: introLeave 1s;
+        }
 
         /*.intro {*/
         /*background-color: #555;*/
@@ -338,6 +465,16 @@
           font-size: 2.5rem;
         }
       }
+    }
+  }
+
+  @keyframes test {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
     }
   }
 </style>
