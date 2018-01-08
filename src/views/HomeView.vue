@@ -1,17 +1,21 @@
 <template>
   <main class="home">
     <div class="slogen">
-      <!--TODO full screen-->
+      <!--TODO 使用 fullpage.js https://alvarotrigo.com/fullPage/#firstPage 实现全屏翻页-->
+      <!--TODO 使用 waypoints http://imakewebthings.com/waypoints/ 实现滚动加载(根据滚动位置触发事件，然后使用css动画做淡入淡出效果)-->
+      <!--TODO 完善 List 组件-->
+      <!--TODO 编写 Share 组件-->
+      <!--TODO 编写 Footer 组件-->
       <canvas ref="background"></canvas>
       <div class="container">
         <transition
           name="first-slogen"
-          enter-active-class="animated fadeInDownBig"
-          leave-active-class="animated fadeOutUpBig"
+          enter-active-class="animated fadeInLeftBig"
+          leave-active-class="animated fadeOutRightBig"
           v-on:after-enter="showSecondSlogen"
           appear
         >
-          <h1>相信</h1>
+          <h1 v-if="isShowFirstSlogen">相信</h1>
         </transition>
         <transition
           name="second-slogen"
@@ -54,30 +58,7 @@
         <div class="container">
           <h2>我想了解</h2>
           <ul>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'pku' }}">北京大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'tsu' }}">清华大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'zju' }}">浙江大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'fdu' }}">复旦大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'ruc' }}">中国人民大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'sjtu' }}">上海交通大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'tju' }}">天津大学</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'UniversityItem', params: { name: 'nku' }}">南开大学</router-link>
-            </li>
+            <li v-for="university in universities"><router-link :to="{ name: 'UniversityItem', params: { id: university.id }}">{{ university.name }}</router-link></li>
           </ul>
           <div class="more">
             <router-link :to="{ name: 'UniversityList'}">查看更多</router-link>
@@ -104,15 +85,23 @@
 </template>
 
 <script>
+  import universities from '@/universities.json'
   export default {
     data () {
       return {
+        isShowFirstSlogen: false,
         isShowSecondSlogen: false,
         isShowIntro: false,
-        isShowMoreIcon: false
+        isShowMoreIcon: false,
+        universities: universities
       }
     },
     methods: {
+      showFirstSlogen () {
+        setTimeout(() => {
+          this.isShowFirstSlogen = true
+        }, 500)
+      },
       showSecondSlogen () {
         setTimeout(() => {
           this.isShowSecondSlogen = true
@@ -124,6 +113,7 @@
         }, 500)
       },
       showBackground () {
+        // 星空连线
         // https://segmentfault.com/a/1190000009675230
         let el = this.$refs.background
         let ctx = el.getContext('2d')
@@ -280,8 +270,10 @@
     components: {},
     mounted () {
       this.showBackground()
+      this.showFirstSlogen()
     },
     created () {
+      // https://github.com/vuejs/Discussion/issues/324 绑定滚动事件
 //      window.addEventListener('scroll', this.handleScroll)
     },
     destroyed () {
@@ -296,21 +288,32 @@
       height: 100vh;
       background-color: #222;
 
+      // 使container充满
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
       > canvas {
+        // 作为背景
         position: absolute;
         top: 0;
-        z-index: 1;
+
         width: 100vw;
         height: 100vh;
       }
 
       > .container {
-        display: flex;
+        // 充满university-list-header
+        flex-grow: 1;
+
         position: relative; // 使得z-index生效
-        z-index: 2;
-        flex-direction: column;
+        z-index: 1; // 相比于container应该在下一层
         padding: 20vh 10vw 10vh;
         height: 100vh;
+
+        // 使得i.more靠下居中
+        display: flex;
+        flex-direction: column;
 
         > h1 {
           font-size: 5rem;
@@ -428,18 +431,6 @@
         > .intro-leave-active {
           animation: introLeave 1s;
         }
-
-        /*.intro {*/
-        /*background-color: #555;*/
-
-        /*> .container {*/
-        /*padding: 30px 20px;*/
-
-        /*> h2 {*/
-        /*font-size: 2.5rem;*/
-        /*}*/
-        /*}*/
-        /*}*/
       }
     }
 

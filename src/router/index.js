@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomeView from '@/views/HomeView'
+import UniversityListView from '@/views/UniversityListView'
+import UniversityItemView from '@/views/UniversityItemView'
 
 Vue.use(Router)
 
@@ -9,18 +11,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HomeView',
+      name: 'Home',
       component: HomeView
     },
     {
       path: '/universities',
       name: 'UniversityList',
-      component: HomeView
+      component: UniversityListView
     },
     {
-      path: '/universities/:name',
+      path: '/universities/:id',
       name: 'UniversityItem',
-      component: HomeView
+      component: UniversityItemView
     }
   ]
 })
