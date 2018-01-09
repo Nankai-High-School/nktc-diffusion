@@ -12,7 +12,7 @@
         name="header"
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
-        v-on:after-enter="showBody"
+        v-on:before-enter="showBody"
         appear
       >
         <div class="container">
@@ -30,7 +30,7 @@
       >
         <div class="container" v-if="isShowBody">
           <div v-html="university.description"></div>
-          <router-link :to="{ name: 'UniversityList'}">返回</router-link>
+          <div class="back"><router-link :to="{ name: 'UniversityList'}">返回</router-link></div>
         </div>
       </transition>
     </div>
@@ -53,7 +53,7 @@
       showBody () {
         setTimeout(() => {
           this.isShowBody = true
-        }, 0)
+        }, 350)
       }
     }
   }
