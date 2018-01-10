@@ -295,7 +295,7 @@
         position: absolute;
         top: 0;
 
-        width: 100vw;
+        width: 100%; // 如果使用100vw会导致出现水平滚动条
         height: 100vh;
       }
 
@@ -365,7 +365,6 @@
         }
       }
     }
-
     > .banner {
       min-height: 90vh;
       background-color: #333;
