@@ -7,14 +7,14 @@
 </template>
 
 <script>
-  import AppShare from './components/AppShare.vue'
-  import AppFooter from './components/AppFooter.vue'
+  import Share from './components/Share.vue'
+  import Footer from './components/Footer.vue'
 
   export default {
     name: 'app',
     components: {
-      'app-share': AppShare,
-      'app-footer': AppFooter
+      'app-share': Share,
+      'app-footer': Footer
     }
   }
 </script>

@@ -1,11 +1,6 @@
 <template>
   <main class="home">
     <div class="slogen">
-      <!--TODO 使用 fullpage.js https://alvarotrigo.com/fullPage/#firstPage 实现全屏翻页-->
-      <!--TODO 使用 waypoints http://imakewebthings.com/waypoints/ 实现滚动加载(根据滚动位置触发事件，然后使用css动画做淡入淡出效果)-->
-      <!--TODO 完善 List 组件-->
-      <!--TODO 编写 Share 组件-->
-      <!--TODO 编写 Footer 组件-->
       <canvas ref="background"></canvas>
       <div class="container">
         <transition
@@ -15,8 +10,9 @@
           v-on:after-enter="showSecondSlogen"
           appear
         >
-          <h1 v-if="isShowFirstSlogen">相信</h1>
+          <h1>相信</h1>
         </transition>
+
         <transition
           name="second-slogen"
           enter-active-class="animated fadeIn"
@@ -33,69 +29,68 @@
       </div>
     </div>
 
-    <div class="other">
-      <div class="banner">
-        <div class="container">
-          <h3>2018</h3>
-          <h1>热传递</h1>
-          <h2>高校信息普及计划</h2>
-          <h4><a href="#intro" @click="isShowIntro = !isShowIntro">什么是热传递？</a></h4>
-          <transition
-            name="intro"
-          >
-            <div class="intro" v-if="isShowIntro">
-              <p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>
-              <p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>
-              <p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>
-              <p>我们相信梦想的力量，更相信传承的力量。</p>
-              <p>聚是一团火，化作漫天星。</p>
-            </div>
-          </transition>
-        </div>
+    <div class="banner">
+      <div class="container">
+        <h3>2018</h3>
+        <h1>热传递</h1>
+        <h2>高校信息普及计划</h2>
+        <h4 @click="isShowIntro = !isShowIntro">什么是热传递？</h4>
+        <transition
+          name="intro"
+        >
+          <div class="intro" v-if="isShowIntro">
+            <p>如果提前感受梦想与现实的差距，也许我们能更好的前行。</p>
+            <p>这次，我们把梦想变成信息流，然后把更多的梦想变成现实。</p>
+            <p>热传递计划是一个邀请已毕业南开中学学长学姐，回校交流的活动。</p>
+            <p>我们相信梦想的力量，更相信传承的力量。</p>
+            <p>聚是一团火，化作漫天星。</p>
+          </div>
+        </transition>
       </div>
+    </div>
 
-      <div class="university-list">
-        <div class="container">
-          <h2>我想了解</h2>
-          <div class="row">
-            <template v-for="university in universities">
-              <div v-if="!university.hide" class="col col-lg-3 col-md-4 col-sm-6 col-12">
-                <router-link :to="{ name: 'UniversityItem', params: { id: university.id }}" class="university-list-item">
-                  <div class="cover" v-bind:style="{ backgroundImage: 'url(' + university.cover + ')' }"></div>
-                  <div class="mask"></div>
-                  <div class="body">
-                    <h2 class="name">{{ university.name }}</h2>
-                  </div>
-                </router-link>
-              </div>
-            </template>
-          </div>
-          <div class="more">
-            <router-link :to="{ name: 'UniversityList'}">查看更多</router-link>
-          </div>
+    <div class="university-list">
+      <div class="container">
+        <h2>我想了解</h2>
+
+        <div class="row">
+          <template v-for="university in universities">
+            <div class="col col-lg-3 col-md-4 col-sm-6 col-12">
+              <router-link :to="{ name: 'UniversityItem', params: { id: university.id }}" class="item">
+                <div class="cover" v-bind:style="{ backgroundImage: 'url(' + university.cover + ')' }"></div>
+                <div class="mask"></div>
+                <div class="body">
+                  <h2 class="name">{{ university.name }}</h2>
+                </div>
+              </router-link>
+            </div>
+          </template>
+        </div>
+
+        <div class="more">
+          <router-link :to="{ name: 'UniversityList'}">查看更多</router-link>
         </div>
       </div>
-      <div class="university-create">
-        <div class="container">
-          <h2>我想告诉</h2>
-          <p>如果你想要跟学弟学妹们分享自己的学校，欢迎发送邮件到 <a href="mailto:haiqin.cui@nktry.com">haiqin.cui@nktry.com</a> 跟我们联系。</p>
-          <p>如果您不方便使用邮箱，可以使用下方联系方式。</p>
-          <address>
-            Tel: <a href="tel:+8615822379150">+86 158 2237 9150</a> <br>
-            QQ: 1779161430 <br>
-            WeChat: lookas2001 <br>
-          </address>
-        </div>
+    </div>
+
+    <div class="university-create">
+      <div class="container">
+        <h2>我想告诉</h2>
+        <p>如果你想要跟学弟学妹们分享自己的学校，欢迎发送邮件到 <a href="mailto:haiqin.cui@nktry.com">haiqin.cui@nktry.com</a> 跟我们联系。</p>
+        <p>如果您不方便使用邮箱，可以使用下方联系方式。</p>
+        <address>
+          Tel: <a href="tel:+8615822379150">+86 158 2237 9150</a> <br>
+          QQ: 1779161430 <br>
+          WeChat: lookas2001 <br>
+        </address>
       </div>
-      <!--<app-share></app-share>-->
-      <!--&lt;!&ndash;我要宣传&ndash;&gt;-->
-      <!--<app-feedback></app-feedback>-->
     </div>
   </main>
 </template>
 
 <script>
-  import universities from '@/universities.json'
+  import universities from '@/../static/data/universities.json'
+
   export default {
     data () {
       return {
@@ -103,17 +98,10 @@
         isShowSecondSlogen: false,
         isShowIntro: false,
         isShowMoreIcon: false,
-        universities: universities.filter((university, index) => {
-          return index < 12
-        })
+        universities: null
       }
     },
     methods: {
-      showFirstSlogen () {
-        setTimeout(() => {
-          this.isShowFirstSlogen = true
-        }, 500)
-      },
       showSecondSlogen () {
         setTimeout(() => {
           this.isShowSecondSlogen = true
@@ -279,24 +267,21 @@
         window.requestAnimationFrame(step)
       }
     },
-    components: {},
+    created () {
+      // 读入数据
+      this.universities = universities.filter((university, index) => {
+        return index < 12
+      })
+    },
     mounted () {
       this.showBackground()
-      this.showFirstSlogen()
-    },
-    created () {
-      // https://github.com/vuejs/Discussion/issues/324 绑定滚动事件
-//      window.addEventListener('scroll', this.handleScroll)
-    },
-    destroyed () {
-//      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   .home {
-    .slogen {
+    > .slogen {
       height: 100vh;
       background-color: #222;
 
@@ -381,7 +366,7 @@
       }
     }
 
-    .banner {
+    > .banner {
       min-height: 90vh;
       background-color: #333;
 
@@ -404,6 +389,12 @@
         > h4 {
           margin: 1rem 0 0.75rem;
           font-size: 1.25rem;
+          text-decoration: underline;
+          cursor: pointer;
+
+          &:hover {
+            color: darken(#f8f9fa, 15%);;
+          }
         }
 
         > .intro {
@@ -446,22 +437,22 @@
       }
     }
 
-    .university-list {
+    > .university-list {
       background-color: #444;
 
       > .container {
         padding: 30px 20px;
 
         > h2 {
-          font-size: 2.5rem;
           margin-bottom: 0;
+          font-size: 2.5rem;
         }
 
         > .row {
           > .col {
             padding: 20px 20px 0;
 
-            .university-list-item {
+            .item {
               position: relative;
               min-height: 10rem;
               background-color: #444;
@@ -523,26 +514,17 @@
       }
     }
 
-    .university-create {
+    > .university-create {
       background-color: #555;
 
       > .container {
         padding: 30px 20px;
 
         > h2 {
+          margin-bottom: 20px;
           font-size: 2.5rem;
         }
       }
-    }
-  }
-
-  @keyframes test {
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
     }
   }
 </style>

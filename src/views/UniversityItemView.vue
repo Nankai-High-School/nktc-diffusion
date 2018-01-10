@@ -1,6 +1,6 @@
 <template>
   <main class="university-item">
-    <div class="university-item-header">
+    <div class="header">
       <div class="cover" v-bind:style="{ backgroundImage: 'url(' + university.cover + ')' }"></div>
       <transition
         name="mask"
@@ -21,7 +21,7 @@
       </transition>
     </div>
 
-    <div class="university-item-body">
+    <div class="body">
       <transition
         name="list"
         enter-active-class="animated fadeIn"
@@ -30,6 +30,7 @@
       >
         <div class="container" v-if="isShowBody">
           <div v-html="university.description"></div>
+
           <div class="back"><router-link :to="{ name: 'UniversityList'}">返回</router-link></div>
         </div>
       </transition>
@@ -38,15 +39,13 @@
 </template>
 
 <script>
-  import universities from '@/universities.json'
+  import universities from '@/../static/data/universities.json'
 
   export default {
     data () {
       return {
         isShowBody: false,
-        university: universities.find((university) => {
-          return university.id === this.$route.params.id
-        })
+        university: null
       }
     },
     methods: {
@@ -55,13 +54,19 @@
           this.isShowBody = true
         }, 350)
       }
+    },
+    created () {
+      // 读入数据
+      this.university = universities.find((university) => {
+        return university.id === this.$route.params.id
+      })
     }
   }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   .university-item {
-    > .university-item-header {
+    > .header {
       min-height: 40vh;
       background-color: #444;
 
@@ -122,7 +127,7 @@
       }
 
       > .container {
-        // 充满university-item-header
+        // 充满header
         flex-grow: 1;
 
         padding: 30px 20px;
@@ -140,7 +145,7 @@
       }
     }
 
-    > .university-item-body {
+    > .body {
       min-height: 80vh;
       background-color: #555;
 

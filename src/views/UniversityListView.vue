@@ -1,6 +1,6 @@
 <template>
   <main class="university-list">
-    <div class="university-list-header">
+    <div class="header">
       <transition
         name="header"
         enter-active-class="animated fadeIn"
@@ -14,9 +14,9 @@
       </transition>
     </div>
 
-    <div class="university-list-body">
+    <div class="body">
       <transition
-        name="list"
+        name="body"
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
         appear
@@ -25,10 +25,11 @@
           <div class="search">
             <input v-model="keyword" type="search" class="form-control" placeholder="查找..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false">
           </div>
+
           <div class="row">
             <template v-for="university in universities">
-              <div v-if="!university.hide" class="col col-lg-3 col-md-4 col-sm-6 col-12">
-                <router-link :to="{ name: 'UniversityItem', params: { id: university.id }}" class="university-list-item">
+              <div v-if="hide.indexOf(university.id) === -1" class="col col-lg-3 col-md-4 col-sm-6 col-12">
+                <router-link :to="{ name: 'UniversityItem', params: { id: university.id }}" class="item">
                   <div class="cover" v-bind:style="{ backgroundImage: 'url(' + university.cover + ')' }"></div>
                   <div class="mask"></div>
                   <div class="body">
@@ -38,6 +39,7 @@
               </div>
             </template>
           </div>
+
           <div class="back"><router-link :to="{ name: 'Home'}">返回</router-link></div>
         </div>
       </transition>
@@ -46,14 +48,15 @@
 </template>
 
 <script>
-  import universities from '@/universities.json'
+  import universities from '@/../static/data/universities.json'
 
   export default {
     data () {
       return {
         isShowBody: false,
+        universities: null,
         keyword: '',
-        universities: universities
+        hide: []
       }
     },
     methods: {
@@ -61,30 +64,45 @@
         setTimeout(() => {
           this.isShowBody = true
         }, 350)
-      }
-    },
-    watch: {
-      keyword: function (value) {
+      },
+      search () {
         // @see https://cn.vuejs.org/v2/guide/computed.html#%E4%BE%A6%E5%90%AC%E5%99%A8
-        // 执行搜索
-        for (let university of this.universities) {
-          university.hide = false
-          if (value) {
-            university.hide = true
-
-            if (university.name.indexOf(value) >= 0) {
-              university.hide = false
-              continue
+        // 执行搜索（低效率搜索:(）
+        this.hide = []
+        if (this.keyword) {
+          for (let university of this.universities) {
+            let show = false
+            if (university.name.indexOf(this.keyword) >= 0) {
+              show = true
+            } else {
+              for (let tag of university.tags) {
+                if (tag === this.keyword) {
+                  show = true
+                  break
+                }
+              }
             }
 
-            for (let tag of university.tags) {
-              if (tag === value) {
-                university.hide = false
-                continue
-              }
+            if (!show) {
+              this.hide.push(university.id)
             }
           }
         }
+      }
+    },
+    created () {
+      // 读入数据
+      this.universities = universities
+      /*
+      不要在universities上增加hide属性
+      在进入详情页面并且返回列表页面后input会清空，但是列表会显示不起
+      Vue会在每一次进入或者返回页面的时候重新渲染一次元素，所以每次进入列表都会调用import导入数据
+      猜想：第一二次导入的是同一个对象，在第一次的对象上增加了hide属性，在第二次导入的时候hide属性没有消除
+       */
+    },
+    watch: {
+      keyword (value) {
+        this.search()
       }
     }
   }
@@ -92,7 +110,7 @@
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   .university-list {
-    > .university-list-header {
+    > .header {
       min-height: 20vh;
       background-color: #444;
 
@@ -102,7 +120,7 @@
       align-items: stretch;
 
       > .container {
-        // 充满university-list-header
+        // 充满header
         flex-grow: 1;
 
         padding: 30px 20px;
@@ -118,7 +136,7 @@
       }
     }
 
-    > .university-list-body {
+    > .body {
       min-height: 80vh;
       background-color: #555;
 
@@ -127,7 +145,8 @@
 
         > .search {
           input:focus {
-            outline: none;
+            box-shadow: none;
+            border: 1px solid #ced4da;
           }
         }
 
@@ -135,7 +154,7 @@
           > .col {
             padding: 20px 20px 0;
 
-            .university-list-item {
+            .item {
               position: relative;
               min-height: 10rem;
               background-color: #444;
