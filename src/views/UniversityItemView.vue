@@ -29,7 +29,7 @@
         appear
       >
         <div class="container" v-if="isShowBody">
-          <div v-html="university.description"></div>
+          <div class="description" v-html="university.description"></div>
 
           <div class="back"><router-link :to="{ name: 'UniversityList'}">返回</router-link></div>
         </div>
@@ -151,6 +151,12 @@
 
       > .container {
         padding: 30px 20px;
+
+        > .description { // 不要被scoped约束
+          /deep/ h2 {
+            font-size: 1.75rem;
+          }
+        }
       }
     }
   }

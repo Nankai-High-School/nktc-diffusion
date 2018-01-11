@@ -1,30 +1,45 @@
-# diffusion
+# NKTC Diffusion
 
-> NKTC Diffusion
+欢迎使用 NKTC Diffusion ！
 
-## Build Setup
+## 使用说明
 
-``` bash
-# install dependencies
-npm install
+### 编辑
 
-# serve with hot reload at localhost:8080
-npm run dev
+复制 /static/data/universities.example.json 到 /static/data/universities.json 开始增加大学。
 
-# build for production with minification
-npm run build
+在 /static/data 目录下可以增加图片或者视频。
 
-# build for production and view the bundle analyzer report
-npm run build --report
+> 例：如果要为一个大学添加 cover，cover 参数可以写成如下形式 /static/data/uf-cover.jpg 。
 
-# run unit tests
-npm run unit
+### 编译
 
-# run e2e tests
-npm run e2e
+为了保证编译顺利进行，你需要安装node以及npm。
 
-# run all tests
-npm test
+在每次修改完大学信息后，需要重新编译程序，使用如下命令：
+
+> npm run build
+
+而后会在 /dist 目录下生成需要部署的文件。
+
+### 部署
+
+请使用Apache2部署项目，启用rewrite mod并且在部署项目的目录下创建如下文件来实现Pretty Urls，内容如下：
+
+.htaccess
+```
+RewriteEngine On
+# If an existing asset or directory is requested go to it as it is
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+# If the requested resource doesn't exist, use index.html
+RewriteRule ^ /index.html
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+如果你不想部署到线上，你可以使用
+
+> npm run dev
+
+使用一个本地的测试环境（localhost:8080）

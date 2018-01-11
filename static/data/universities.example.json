@@ -1,0 +1,20 @@
+[
+  {
+    "id": "uf",
+    "name": "第一大学",
+    "description": "<p>一大简介</p>",
+    "cover": "/static/data/uf-cover.jpg",
+    "tags": [
+      "uf", "一大"
+    ]
+  },
+  {
+    "id": "us",
+    "name": "第二大学",
+    "description": "<p>二大简介</p>",
+    "cover": "/static/data/us-cover.jpg",
+    "tags": [
+      "us", "二大"
+    ]
+  }
+]
