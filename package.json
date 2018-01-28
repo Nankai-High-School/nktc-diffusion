@@ -1,7 +1,8 @@
 {
-  "name": "diffusion",
-  "version": "1.0.0",
-  "description": "NKTC Diffusion",
+  "name": "nktc-diffusion",
+  "version": "1.0.1",
+  "description": "An activity page for NKTC Diffusion made by vue.js.",
+  "license": "AGPL-3.0-only",
   "author": "lookas2001 <lookas2001@qq.com>",
   "private": true,
   "scripts": {
